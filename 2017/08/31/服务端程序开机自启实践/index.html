@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="windows服务," />
 
 
 
@@ -94,13 +94,22 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="胡昊的流水账">
-<meta property="og:url" content="https://hu382337381.github.io/categories/programming/index.html">
+<meta name="description" content="最近由于业务的要求，要将装在客户服务器上的服务端程序设置为开机自启动，百度良久基本得到三种方式： 本地最策略在运行中输入gpedit.msc就进入了本地组策略编辑器 通过“在用户登录时运行这些程序”能够设置登录时运行的程序，但是服务器重启后不一定会有用户登录，所以这个方案被pass了。 任务计划打开任务计划程序界面,可以创建任务并设置启动程序的时间，但是我的服务端程序启动时会读取一些配置文件，而用">
+<meta name="keywords" content="windows服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务端程序开机自启实践">
+<meta property="og:url" content="https://hu382337381.github.io/2017/08/31/服务端程序开机自启实践/index.html">
 <meta property="og:site_name" content="胡昊的流水账">
+<meta property="og:description" content="最近由于业务的要求，要将装在客户服务器上的服务端程序设置为开机自启动，百度良久基本得到三种方式： 本地最策略在运行中输入gpedit.msc就进入了本地组策略编辑器 通过“在用户登录时运行这些程序”能够设置登录时运行的程序，但是服务器重启后不一定会有用户登录，所以这个方案被pass了。 任务计划打开任务计划程序界面,可以创建任务并设置启动程序的时间，但是我的服务端程序启动时会读取一些配置文件，而用">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://hu382337381.github.io/images/本地组策略.png">
+<meta property="og:image" content="https://hu382337381.github.io/images/任务计划.png">
+<meta property="og:image" content="https://hu382337381.github.io/images/服务报错.png">
+<meta property="og:updated_time" content="2017-08-31T16:04:29.165Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="胡昊的流水账">
+<meta name="twitter:title" content="服务端程序开机自启实践">
+<meta name="twitter:description" content="最近由于业务的要求，要将装在客户服务器上的服务端程序设置为开机自启动，百度良久基本得到三种方式： 本地最策略在运行中输入gpedit.msc就进入了本地组策略编辑器 通过“在用户登录时运行这些程序”能够设置登录时运行的程序，但是服务器重启后不一定会有用户登录，所以这个方案被pass了。 任务计划打开任务计划程序界面,可以创建任务并设置启动程序的时间，但是我的服务端程序启动时会读取一些配置文件，而用">
+<meta name="twitter:image" content="https://hu382337381.github.io/images/本地组策略.png">
 
 
 
@@ -129,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="https://hu382337381.github.io/categories/programming/"/>
+  <link rel="canonical" href="https://hu382337381.github.io/2017/08/31/服务端程序开机自启实践/"/>
 
 
 
 
 
-  <title>分类: 编程 | 胡昊的流水账</title>
+  <title>服务端程序开机自启实践 | 胡昊的流水账</title>
   
 
 
@@ -160,7 +169,7 @@
     
   
 
-  <div class="container sidebar-position-right  ">
+  <div class="container sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,83 +287,215 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>编程<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hu382337381.github.io/2017/08/31/服务端程序开机自启实践/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="胡昊">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/sunset-57007_640.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="胡昊的流水账">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/08/31/服务端程序开机自启实践/" itemprop="url">
-              
-                <span itemprop="name">服务端程序开机自启实践</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">服务端程序开机自启实践</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-31T22:03:13+08:00"
-              content="2017-08-31" >
-          08-31
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T22:03:13+08:00">
+                2017-08-31
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/31/服务端程序开机自启实践/" class="leancloud_visitors" data-flag-title="服务端程序开机自启实践">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  699
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/08/29/react-navigation之TabNavigator实践/" itemprop="url">
-              
-                <span itemprop="name">react-navigation之TabNavigator实践</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-29T15:08:46+08:00"
-              content="2017-08-29" >
-          08-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <p>最近由于业务的要求，要将装在客户服务器上的服务端程序设置为开机自启动，百度良久基本得到三种方式：</p>
+<h4 id="本地最策略"><a href="#本地最策略" class="headerlink" title="本地最策略"></a>本地最策略</h4><p>在运行中输入gpedit.msc就进入了本地组策略编辑器</p>
+<p><img src="/images/本地组策略.png" alt="Alt text"><br>通过“在用户登录时运行这些程序”能够设置登录时运行的程序，但是服务器重启后不一定会有用户登录，所以这个方案被pass了。</p>
+<h4 id="任务计划"><a href="#任务计划" class="headerlink" title="任务计划"></a>任务计划</h4><p><img src="/images/任务计划.png" alt="Alt text"><br>打开任务计划程序界面,可以创建任务并设置启动程序的时间，但是我的服务端程序启动时会读取一些配置文件，而用此方法启动的程序读取的目录不是我的程序目录而是c:/windows/system32,而且怎么都无法修改目录（也许是我太low，找不到方法），至于能否开机自启动也就没有测试了，此方法直接pass了。</p>
+<h4 id="windows服务"><a href="#windows服务" class="headerlink" title="windows服务"></a>windows服务</h4><p>由于普通的程序根本无法在登录前启动，要想在服务器重启后且无人登录的情况下启动程序，就必须将需要启动的程序注册成windows服务，因为只有windows服务才能在登录前启用；按照教程<code>sc create</code>命令老老实实将我的程序注册成windows服务后，还暗自窃喜这么简单，然而在我启动服务后电脑无情的给了我一个提示:<br><img src="/images/服务报错.png" alt="Alt text"><br>在服务启动还在读取进度条的期间我的应用可以访问到服务器，到报错提示后就不能访问了，再结合这个错误提示，我猜测应该是服务启动后我的程序没有给系统一个响应，但是我一个普通应用根本无法响应啊，又是各种搜索之后，又发现了instsrv.exe和srvany.exe这个两个小工具，instsrv.exe的作用是将程序注册成windows服务，srvany.exe的作用是将一个普通的程序封装成一个windows服务，就可以正常启动服务了。具体使用方法，有兴趣的同学可以自行百度，这个教程网上还是很多的。为了以后能偷懒，我将注册windows服务和修改注册表等一系列操作都放入以bat文件中，最后附上我的部分bat文件代码，以供参考<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">@echo off</div><div class="line"></div><div class="line">REM ________________________________________________________________</div><div class="line"></div><div class="line">&gt;nul 2&gt;&amp;1 &quot;%SYSTEMROOT%\system32\cacls.exe&quot; &quot;%SYSTEMROOT%\system32\config\system&quot;</div><div class="line"></div><div class="line">if &apos;%errorlevel%&apos; NEQ &apos;0&apos; (</div><div class="line"></div><div class="line">    echo 请求管理员权限...</div><div class="line"></div><div class="line">    goto UACPrompt</div><div class="line"></div><div class="line">) else ( goto gotAdmin )</div><div class="line"></div><div class="line">:UACPrompt</div><div class="line"></div><div class="line">    echo Set UAC = CreateObject^(&quot;Shell.Application&quot;^) &gt; &quot;%temp%\getadmin.vbs&quot;</div><div class="line"></div><div class="line">    echo UAC.ShellExecute &quot;%~s0&quot;, &quot;&quot;, &quot;&quot;, &quot;runas&quot;, 1 &gt;&gt; &quot;%temp%\getadmin.vbs&quot;</div><div class="line"></div><div class="line">    &quot;%temp%\getadmin.vbs&quot;</div><div class="line"></div><div class="line">    exit /B</div><div class="line"></div><div class="line">:gotAdmin</div><div class="line"></div><div class="line">    if exist &quot;%temp%\getadmin.vbs&quot; ( del &quot;%temp%\getadmin.vbs&quot; )</div><div class="line"></div><div class="line">    pushd &quot;%CD%&quot;</div><div class="line"></div><div class="line">    CD /D &quot;%~dp0&quot;</div><div class="line"></div><div class="line">REM ________________________________________________________________</div><div class="line">rem 注册windows服务</div><div class="line">call service.bat</div><div class="line">rem 修改注册表</div><div class="line">call regedit /s xlsysapp.reg</div><div class="line">pause&gt;nul</div></pre></td></tr></table></figure></p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/windows服务/" rel="tag"># windows服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/29/react-navigation之TabNavigator实践/" rel="next" title="react-navigation之TabNavigator实践">
+                <i class="fa fa-chevron-left"></i> react-navigation之TabNavigator实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -362,6 +503,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -382,8 +527,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/sunset-57007_640.jpg"
@@ -445,6 +599,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#本地最策略"><span class="nav-number">1.</span> <span class="nav-text">本地最策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#任务计划"><span class="nav-number">2.</span> <span class="nav-text">任务计划</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#windows服务"><span class="nav-number">3.</span> <span class="nav-text">windows服务</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -565,10 +735,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 

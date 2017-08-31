@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[服务端程序开机自启实践]]></title>
+    <url>%2F2017%2F08%2F31%2F%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%A8%8B%E5%BA%8F%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%AE%9E%E8%B7%B5%2F</url>
+    <content type="text"><![CDATA[最近由于业务的要求，要将装在客户服务器上的服务端程序设置为开机自启动，百度良久基本得到三种方式： 本地最策略在运行中输入gpedit.msc就进入了本地组策略编辑器 通过“在用户登录时运行这些程序”能够设置登录时运行的程序，但是服务器重启后不一定会有用户登录，所以这个方案被pass了。 任务计划打开任务计划程序界面,可以创建任务并设置启动程序的时间，但是我的服务端程序启动时会读取一些配置文件，而用此方法启动的程序读取的目录不是我的程序目录而是c:/windows/system32,而且怎么都无法修改目录（也许是我太low，找不到方法），至于能否开机自启动也就没有测试了，此方法直接pass了。 windows服务由于普通的程序根本无法在登录前启动，要想在服务器重启后且无人登录的情况下启动程序，就必须将需要启动的程序注册成windows服务，因为只有windows服务才能在登录前启用；按照教程sc create命令老老实实将我的程序注册成windows服务后，还暗自窃喜这么简单，然而在我启动服务后电脑无情的给了我一个提示:在服务启动还在读取进度条的期间我的应用可以访问到服务器，到报错提示后就不能访问了，再结合这个错误提示，我猜测应该是服务启动后我的程序没有给系统一个响应，但是我一个普通应用根本无法响应啊，又是各种搜索之后，又发现了instsrv.exe和srvany.exe这个两个小工具，instsrv.exe的作用是将程序注册成windows服务，srvany.exe的作用是将一个普通的程序封装成一个windows服务，就可以正常启动服务了。具体使用方法，有兴趣的同学可以自行百度，这个教程网上还是很多的。为了以后能偷懒，我将注册windows服务和修改注册表等一系列操作都放入以bat文件中，最后附上我的部分bat文件代码，以供参考1234567891011121314151617181920212223242526272829303132333435363738@echo offREM ________________________________________________________________&gt;nul 2&gt;&amp;1 &quot;%SYSTEMROOT%\system32\cacls.exe&quot; &quot;%SYSTEMROOT%\system32\config\system&quot;if &apos;%errorlevel%&apos; NEQ &apos;0&apos; ( echo 请求管理员权限... goto UACPrompt) else ( goto gotAdmin ):UACPrompt echo Set UAC = CreateObject^(&quot;Shell.Application&quot;^) &gt; &quot;%temp%\getadmin.vbs&quot; echo UAC.ShellExecute &quot;%~s0&quot;, &quot;&quot;, &quot;&quot;, &quot;runas&quot;, 1 &gt;&gt; &quot;%temp%\getadmin.vbs&quot; &quot;%temp%\getadmin.vbs&quot; exit /B:gotAdmin if exist &quot;%temp%\getadmin.vbs&quot; ( del &quot;%temp%\getadmin.vbs&quot; ) pushd &quot;%CD%&quot; CD /D &quot;%~dp0&quot;REM ________________________________________________________________rem 注册windows服务call service.batrem 修改注册表call regedit /s xlsysapp.regpause&gt;nul]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>windows服务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[react-navigation之TabNavigator实践]]></title>
+    <url>%2F2017%2F08%2F29%2Freact-navigation%E4%B9%8BTabNavigator%E5%AE%9E%E8%B7%B5%2F</url>
+    <content type="text"><![CDATA[参考官网https://reactnavigation.org/docs/intro/123456789101112131415161718import &#123; TabNavigator &#125; from &quot;react-navigation&quot;;class RecentChatsScreen extends React.Component &#123; render() &#123; return &lt;Text&gt;List of recent chats&lt;/Text&gt; &#125;&#125;class AllContactsScreen extends React.Component &#123; render() &#123; return &lt;Text&gt;List of all contacts&lt;/Text&gt; &#125;&#125;const MainScreenNavigator = TabNavigator(&#123; Recent: &#123; screen: RecentChatsScreen &#125;, All: &#123; screen: AllContactsScreen &#125;,&#125;); 官方例子很清晰，就是在两个tabbar之间切换，但是tabbar只设置了label,没有设置icon，然而我实践时添加了icon后，发现悲剧了，每次点击tabbar切换时，都有一秒左右的延迟，体验效果很不好，开始以为是因为icon和title一起显示的问题，后来只显示其中之一也会有延迟，但是看官网的expo展示却很流畅；接下来几天中我都在网上找人人问问题，结果居然根本没人提过这个问题，不死心的我又去看源码，但是源码中也没有写延迟的属性，后来无意中发现在开发模式下启用Debug js Remotely也就是启用浏览器debug，居然延迟就没了，据此我不禁想如果打成release包，是不是也不会延迟呢，最终发现在release包中真的没有延迟，问题虽然解决了但是我还是费解，为什么在调试模式时tabbar切换会有延时呢，这是个问题！特此说明以上延迟问题针对的是android。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>react-native</tag>
+      </tags>
+  </entry>
+</search>
