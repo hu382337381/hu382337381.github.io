@@ -95,12 +95,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="胡昊的流水账">
+<meta property="og:title" content="Harmer&#39;s杂货铺">
 <meta property="og:url" content="https://hu382337381.github.io/index.html">
-<meta property="og:site_name" content="胡昊的流水账">
+<meta property="og:site_name" content="Harmer&#39;s杂货铺">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="胡昊的流水账">
+<meta name="twitter:title" content="Harmer&#39;s杂货铺">
 
 
 
@@ -135,7 +135,7 @@
 
 
 
-  <title>胡昊的流水账</title>
+  <title>Harmer's杂货铺</title>
   
 
 
@@ -173,7 +173,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">胡昊的流水账</span>
+        <span class="site-title">Harmer's杂货铺</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -297,13 +297,13 @@
     <link itemprop="mainEntityOfPage" href="https://hu382337381.github.io/2017/08/31/服务端程序开机自启实践/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="胡昊">
+      <meta itemprop="name" content="harmer">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/sunset-57007_640.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="胡昊的流水账">
+      <meta itemprop="name" content="Harmer's杂货铺">
     </span>
 
     
@@ -429,13 +429,18 @@
       
         
           
-            <p>最近由于业务的要求，要将装在客户服务器上的服务端程序设置为开机自启动，百度良久基本得到三种方式：</p>
-<h4 id="本地最策略"><a href="#本地最策略" class="headerlink" title="本地最策略"></a>本地最策略</h4><p>在运行中输入gpedit.msc就进入了本地组策略编辑器</p>
-<p><img src="/images/本地组策略.png" alt="Alt text"><br>通过“在用户登录时运行这些程序”能够设置登录时运行的程序，但是服务器重启后不一定会有用户登录，所以这个方案被pass了。</p>
-<h4 id="任务计划"><a href="#任务计划" class="headerlink" title="任务计划"></a>任务计划</h4><p><img src="/images/任务计划.png" alt="Alt text"><br>打开任务计划程序界面,可以创建任务并设置启动程序的时间，但是我的服务端程序启动时会读取一些配置文件，而用此方法启动的程序读取的目录不是我的程序目录而是c:/windows/system32,而且怎么都无法修改目录（也许是我太low，找不到方法），至于能否开机自启动也就没有测试了，此方法直接pass了。</p>
-<h4 id="windows服务"><a href="#windows服务" class="headerlink" title="windows服务"></a>windows服务</h4><p>由于普通的程序根本无法在登录前启动，要想在服务器重启后且无人登录的情况下启动程序，就必须将需要启动的程序注册成windows服务，因为只有windows服务才能在登录前启用；按照教程<code>sc create</code>命令老老实实将我的程序注册成windows服务后，还暗自窃喜这么简单，然而在我启动服务后电脑无情的给了我一个提示:<br><img src="/images/服务报错.png" alt="Alt text"><br>在服务启动还在读取进度条的期间我的应用可以访问到服务器，到报错提示后就不能访问了，再结合这个错误提示，我猜测应该是服务启动后我的程序没有给系统一个响应，但是我一个普通应用根本无法响应啊，又是各种搜索之后，又发现了instsrv.exe和srvany.exe这个两个小工具，instsrv.exe的作用是将程序注册成windows服务，srvany.exe的作用是将一个普通的程序封装成一个windows服务，就可以正常启动服务了。具体使用方法，有兴趣的同学可以自行百度，这个教程网上还是很多的。为了以后能偷懒，我将注册windows服务和修改注册表等一系列操作都放入以bat文件中，最后附上我的部分bat文件代码，以供参考<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">@echo off</div><div class="line"></div><div class="line">REM ________________________________________________________________</div><div class="line"></div><div class="line">&gt;nul 2&gt;&amp;1 &quot;%SYSTEMROOT%\system32\cacls.exe&quot; &quot;%SYSTEMROOT%\system32\config\system&quot;</div><div class="line"></div><div class="line">if &apos;%errorlevel%&apos; NEQ &apos;0&apos; (</div><div class="line"></div><div class="line">    echo 请求管理员权限...</div><div class="line"></div><div class="line">    goto UACPrompt</div><div class="line"></div><div class="line">) else ( goto gotAdmin )</div><div class="line"></div><div class="line">:UACPrompt</div><div class="line"></div><div class="line">    echo Set UAC = CreateObject^(&quot;Shell.Application&quot;^) &gt; &quot;%temp%\getadmin.vbs&quot;</div><div class="line"></div><div class="line">    echo UAC.ShellExecute &quot;%~s0&quot;, &quot;&quot;, &quot;&quot;, &quot;runas&quot;, 1 &gt;&gt; &quot;%temp%\getadmin.vbs&quot;</div><div class="line"></div><div class="line">    &quot;%temp%\getadmin.vbs&quot;</div><div class="line"></div><div class="line">    exit /B</div><div class="line"></div><div class="line">:gotAdmin</div><div class="line"></div><div class="line">    if exist &quot;%temp%\getadmin.vbs&quot; ( del &quot;%temp%\getadmin.vbs&quot; )</div><div class="line"></div><div class="line">    pushd &quot;%CD%&quot;</div><div class="line"></div><div class="line">    CD /D &quot;%~dp0&quot;</div><div class="line"></div><div class="line">REM ________________________________________________________________</div><div class="line">rem 注册windows服务</div><div class="line">call service.bat</div><div class="line">rem 修改注册表</div><div class="line">call regedit /s xlsysapp.reg</div><div class="line">pause&gt;nul</div></pre></td></tr></table></figure></p>
-
-          
+          最近由于业务的要求，要将装在客户服务器上的服务端程序设置为开机自启动，百度良久基本得到三种方式：
+本地最策略在运行中输入gpedit.msc就进入了本地组策略编辑器
+通过“在用户登录时运行这些程序”能够设置登录时运行的程序，但是服务器重启后不一定会有用户登录，所以这个方案被pass了。
+任务计划打开
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/08/31/服务端程序开机自启实践/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -485,13 +490,13 @@
     <link itemprop="mainEntityOfPage" href="https://hu382337381.github.io/2017/08/29/react-navigation之TabNavigator实践/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="胡昊">
+      <meta itemprop="name" content="harmer">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/sunset-57007_640.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="胡昊的流水账">
+      <meta itemprop="name" content="Harmer's杂货铺">
     </span>
 
     
@@ -617,10 +622,15 @@
       
         
           
-            <h3 id="参考官网https-reactnavigation-org-docs-intro"><a href="#参考官网https-reactnavigation-org-docs-intro" class="headerlink" title="参考官网https://reactnavigation.org/docs/intro/"></a>参考官网<a href="https://reactnavigation.org/docs/intro/" target="_blank" rel="external">https://reactnavigation.org/docs/intro/</a></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">import &#123; TabNavigator &#125; from &quot;react-navigation&quot;;</div><div class="line"></div><div class="line">class RecentChatsScreen extends React.Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return &lt;Text&gt;List of recent chats&lt;/Text&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class AllContactsScreen extends React.Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return &lt;Text&gt;List of all contacts&lt;/Text&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const MainScreenNavigator = TabNavigator(&#123;</div><div class="line">  Recent: &#123; screen: RecentChatsScreen &#125;,</div><div class="line">  All: &#123; screen: AllContactsScreen &#125;,</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>官方例子很清晰，就是在两个tabbar之间切换，但是tabbar只设置了label,没有设置icon，然而我实践时添加了icon后，发现悲剧了，每次点击tabbar切换时，都有一秒左右的延迟，体验效果很不好，开始以为是因为icon和title一起显示的问题，后来只显示其中之一也会有延迟，但是看官网的expo展示却很流畅；接下来几天中我都在网上找人人问问题，结果居然根本没人提过这个问题，不死心的我又去看源码，但是源码中也没有写延迟的属性，后来无意中发现在开发模式下启用Debug js Remotely也就是启用浏览器debug，居然延迟就没了，据此我不禁想如果打成release包，是不是也不会延迟呢，最终发现在release包中真的没有延迟，问题虽然解决了但是我还是费解，为什么在调试模式时tabbar切换会有延时呢，这是个问题！特此说明以上延迟问题针对的是android。</p>
-
-          
+          参考官网https://reactnavigation.org/docs/intro/123456789101112131415161718import &#123; TabNavigator &#125; from &quot;react-navigation&quot;;class Recent
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/08/29/react-navigation之TabNavigator实践/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -689,8 +699,8 @@
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/sunset-57007_640.jpg"
-               alt="胡昊" />
-          <p class="site-author-name" itemprop="name">胡昊</p>
+               alt="harmer" />
+          <p class="site-author-name" itemprop="name">harmer</p>
            
               <p class="site-description motion-element" itemprop="description"></p>
           
@@ -768,7 +778,7 @@
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">胡昊</span>
+  <span class="author" itemprop="copyrightHolder">harmer</span>
 </div>
 
 
